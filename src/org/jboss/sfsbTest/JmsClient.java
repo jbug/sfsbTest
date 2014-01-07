@@ -36,6 +36,8 @@ import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.naming.NameClassPair;
+import javax.naming.NamingEnumeration;
 
 import org.jboss.sasl.JBossSaslProvider;
 
@@ -75,6 +77,16 @@ public class JmsClient {
         }
     }
 
+
+    protected void viewJndi(Context ctx, String path) throws Exception {
+		System.out.println("pair '" + path + "'");
+		NamingEnumeration<NameClassPair> enumeration = ctx.list(path);
+		while (enumeration.hasMoreElements()){
+			NameClassPair pair = enumeration.next();
+			System.out.println("  " + pair.getName() + " " + pair.getClassName());
+		}
+	}
+
     public void setupJMSConnection() throws JMSException, NamingException
     {
   /*  	String gearName = System.getenv("OPENSHIFT_GEAR_UUID");
@@ -94,14 +106,19 @@ public class JmsClient {
     	Properties jndiProps = new Properties();
     	jndiProps.put(InitialContext.URL_PKG_PREFIXES, "org.jboss.as.naming.interfaces:org.jboss.ejb.client.naming");
     	jndiProps.put(InitialContext.PROVIDER_URL, "remote://" + remoting);
-    	System.out.println("!!!!!!!! remoting " + remoting);
+    	System.out.println("!!!!!!!! jms remoting " + remoting);
     	context = new InitialContext(jndiProps);
     	
     	System.out.println("!!!!!!!! props " + context.getEnvironment());
-    
+
+	try {
+	viewJndi(context, "");
+	viewJndi(context, "jms");
+    	} catch (Exception e){e.printStackTrace();}
+
  //   	if (gearName.equals(targetGearName)) {
-    		System.out.println("!!! RemoteConnectionFactory");
-    		cf = (ConnectionFactory) context.lookup("RemoteConnectionFactory");
+    		System.out.println("!!! ConnectionFactory");
+    		cf = (ConnectionFactory) context.lookup("ConnectionFactory");
  //   	} else {
  //   		System.out.println("!!! RemoteGearConnectionFactory");
  //   		cf = (ConnectionFactory) context.lookup("java:jboss/exported/jms/RemoteGearConnectionFactory");

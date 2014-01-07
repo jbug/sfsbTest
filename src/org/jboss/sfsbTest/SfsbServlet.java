@@ -39,7 +39,7 @@ import org.jboss.jndiTest.StatefulBean1Remote;
 import org.jboss.jndiTest.StatelessBean1Remote;
 import org.jboss.jndiTest.TestEntity;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
+//import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.log4j.*;
 
 /**
@@ -83,7 +83,7 @@ public class SfsbServlet extends HttpServlet {
 			
 			LOG.info("########################### callSfsb ########################");
 			
-			MysqlTest.initConnection();
+			//MysqlTest.initConnection();
 			
 			//testActiveMQ();
 			
@@ -96,8 +96,8 @@ public class SfsbServlet extends HttpServlet {
 				}
 			} */
 			
-	//		for (int i = 0 ; i < 20 ; ++i)
-	//			runTest(session, "localhost:5445");
+			for (int i = 0 ; i < 20 ; ++i)
+				runTest(session, "localhost:4447");
 			
 //			runTest(session, "be673bcb5b-bdecoste26e.dev.rhcloud.com[35545]");
 //			runTest(session, "scaledas7-bdecoste26e.dev.rhcloud.com[35540]");
@@ -109,7 +109,7 @@ public class SfsbServlet extends HttpServlet {
     	}
 	}
 	
-	protected void testActiveMQ() throws Exception {
+/*	protected void testActiveMQ() throws Exception {
 		
 		String ip = System.getenv("OPENSHIFT_ACTIVEMQ_IP");
 		String port = System.getenv("OPENSHIFT_ACTIVEMQ_OPENWIRE_PORT");
@@ -217,7 +217,7 @@ public class SfsbServlet extends HttpServlet {
         // Clean up
         session.close();
         connection.close();
-	}
+	}*/
 	
 	protected void viewJndi(Context ctx, String path) throws Exception {
 		System.out.println("pair '" + path + "'");
@@ -230,68 +230,68 @@ public class SfsbServlet extends HttpServlet {
 	
 	protected void runTest(HttpSession session, String remoting) throws Exception {
 		System.out.println("-------------------------------");
-    	Properties props = new Properties();
-      
-    	Properties jndiProps = new Properties();
-    	jndiProps.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-    	jndiProps.put(InitialContext.PROVIDER_URL, "remote://" + remoting);
-    	InitialContext jndiContext = new InitialContext(jndiProps);
-    	System.out.println("!!! jndi props " + jndiContext.getEnvironment());
-    	//viewJndi(jndiContext, "");
-    	//viewJndi(jndiContext, "queue");
-    	//viewJndi(jndiContext, "ejb");
-    	
-    	String state = (String)session.getAttribute(STATE);
-    	System.out.println("HTTPSession state " + state);
-    	if (state == null){
-	    	session.setAttribute(STATE, MODIFIED);
-    	}
-    	
-    	StatefulBean1Remote sfsb = (StatefulBean1Remote)session.getAttribute(SFSB);
-    	System.out.println("HTTPSession sfsb " + sfsb);
-    	
-    	if (sfsb == null) {
-    		String jndiBinding = "ejb:/sfsbTest-1.0/StatefulBean1!org.jboss.jndiTest.StatefulBean1Remote?stateful";
-    		sfsb = (StatefulBean1Remote) jndiContext.lookup(jndiBinding);
-    		session.setAttribute(SFSB, sfsb);    		
-    	} else {
-    		String jndiBinding = "ejb:/sfsbTest-1.0/StatefulBean1!org.jboss.jndiTest.StatefulBean1Remote?stateful";
-    		StatefulBean1Remote remote = (StatefulBean1Remote) jndiContext.lookup(jndiBinding);
-    		System.out.println("Calling remote setState");
-    		remote.setState("REMOTE");
-    	}
-    	
-    	String jndiBinding = "java:global/sfsbTest-1.0/StatefulBean1!org.jboss.jndiTest.StatefulBean1Local";
-    	StatefulBean1Local local = (StatefulBean1Local) jndiContext.lookup(jndiBinding);
-    	System.out.println("local bean " + local);
-    	
-    	jndiBinding = "ejb:/sfsbTest-1.0/StatelessBean1!org.jboss.jndiTest.StatelessBean1Remote";
-    	StatelessBean1Remote stateless = (StatelessBean1Remote) jndiContext.lookup(jndiBinding);
-    	System.out.println("stateless bean " + stateless);
-    	for (int i = 0 ; i < 5 ; ++i){
-    		stateless.call();
-    	}
+	/*    	Properties props = new Properties();
+	      
+	    	Properties jndiProps = new Properties();
+	    	jndiProps.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+	    	jndiProps.put(InitialContext.PROVIDER_URL, "remote://" + remoting);
+	    	InitialContext jndiContext = new InitialContext(jndiProps);
+	    	System.out.println("!!! jndi props " + jndiContext.getEnvironment());
+	    	//viewJndi(jndiContext, "");
+	    	//viewJndi(jndiContext, "queue");
+	    	//viewJndi(jndiContext, "ejb");
+	    	
+	    	String state = (String)session.getAttribute(STATE);
+	    	System.out.println("HTTPSession state " + state);
+	    	if (state == null){
+		    	session.setAttribute(STATE, MODIFIED);
+	    	}
+	    	
+	    	StatefulBean1Remote sfsb = (StatefulBean1Remote)session.getAttribute(SFSB);
+	    	System.out.println("HTTPSession sfsb " + sfsb);
+	    	
+	    	if (sfsb == null) {
+	    		String jndiBinding = "ejb:/sfsbTest-1.0/StatefulBean1!org.jboss.jndiTest.StatefulBean1Remote?stateful";
+	    		sfsb = (StatefulBean1Remote) jndiContext.lookup(jndiBinding);
+	    		session.setAttribute(SFSB, sfsb);    		
+	    	} else {
+	    		String jndiBinding = "ejb:/sfsbTest-1.0/StatefulBean1!org.jboss.jndiTest.StatefulBean1Remote?stateful";
+	    		StatefulBean1Remote remote = (StatefulBean1Remote) jndiContext.lookup(jndiBinding);
+	    		System.out.println("Calling remote setState");
+	    		remote.setState("REMOTE");
+	    	}
+	    	
+	    	String jndiBinding = "java:global/sfsbTest-1.0/StatefulBean1!org.jboss.jndiTest.StatefulBean1Local";
+	    	StatefulBean1Local local = (StatefulBean1Local) jndiContext.lookup(jndiBinding);
+	    	System.out.println("local bean " + local);
+	    	
+	    	jndiBinding = "ejb:/sfsbTest-1.0/StatelessBean1!org.jboss.jndiTest.StatelessBean1Remote";
+	    	StatelessBean1Remote stateless = (StatelessBean1Remote) jndiContext.lookup(jndiBinding);
+	    	System.out.println("stateless bean " + stateless);
+	    	for (int i = 0 ; i < 5 ; ++i){
+	    		stateless.call();
+	    	}
 	
-    	System.out.println("State1 " + sfsb.getState());
-    	sfsb.setState("MODIFIED");
-    	System.out.println("State2 " + sfsb.getState());
-    	
-    	long value = System.currentTimeMillis();
-    	long id = 1104;
-    	jndiBinding = "java:global/sfsbTest-1.0/EntityTesterBean!org.jboss.jndiTest.EntityTester";
-    	EntityTester tester = (EntityTester)jndiContext.lookup(jndiBinding);
-    	TestEntity entity = tester.findEntity(id);
-    	if (entity == null) {
-    		System.out.println("Creating entity " + value);
-    		entity = tester.createEntity(id, value);
-    	} else {
-    		System.out.println("found entity " + entity.getValue());
-    	}
-    	
- //   	JmsClient sm = new JmsClient(remoting);
- //       String msg = "Testing123";
+	    	System.out.println("State1 " + sfsb.getState());
+	    	sfsb.setState("MODIFIED");
+	    	System.out.println("State2 " + sfsb.getState());
+	    	
+	    	long value = System.currentTimeMillis();
+	    	long id = 1104;
+	    	jndiBinding = "java:global/sfsbTest-1.0/EntityTesterBean!org.jboss.jndiTest.EntityTester";
+	    	EntityTester tester = (EntityTester)jndiContext.lookup(jndiBinding);
+	    	TestEntity entity = tester.findEntity(id);
+	    	if (entity == null) {
+	    		System.out.println("Creating entity " + value);
+	    		entity = tester.createEntity(id, value);
+	    	} else {
+	    		System.out.println("found entity " + entity.getValue());
+	    	}*/
+	    	
+	    	JmsClient sm = new JmsClient(remoting);
+	        String msg = "Testing123";
 
- //       sm.sendMessageOverJMS(msg);
+	        sm.sendMessageOverJMS(msg);
 	}
 	
 /*	protected void testMail() throws Exception {
