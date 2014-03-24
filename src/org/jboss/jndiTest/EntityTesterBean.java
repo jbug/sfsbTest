@@ -35,9 +35,10 @@ import org.jboss.ejb3.annotation.SecurityDomain;
 public class EntityTesterBean implements EntityTester
 {
 	
-   private @PersistenceContext(unitName="jpa-test") EntityManager manager;
+   //private @PersistenceContext(unitName="jpa-test") EntityManager manager;
+   private EntityManager manager;
    
-//   @RolesAllowed("dummyRole")
+   //@RolesAllowed("dummyRole")
    public TestEntity createEntity(long id, long value){
 	   TestEntity t = new TestEntity();
 	   t.setId(id);
