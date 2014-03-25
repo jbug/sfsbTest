@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>sfsfTest</groupId>
 	<artifactId>sfsbTest</artifactId>
@@ -45,10 +45,10 @@
 
 	<dependencies>
 	    <dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.22</version>
-		</dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.22</version>
+        </dependency>
 		<dependency>
 			<groupId>org.jboss.spec</groupId>
 			<artifactId>jboss-javaee-6.0</artifactId>
@@ -73,42 +73,47 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
 		</dependency>
+		<!--dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-client</artifactId>
+			<version>5.8-SNAPSHOT</version>
+		</dependency-->
 	</dependencies>
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
 				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webappDirectory>WebContent</webappDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-
-		<profile>
-      <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
-      <!-- Use this profile for any OpenShift specific customization your app will need. -->
-      <!-- By default that is to put the resulting archive into the 'deployments' folder. -->
-      <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-			<id>openshift</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.1.1</version>
-						<configuration>
-							<outputDirectory>deployments</outputDirectory>
-							<warName>ROOT</warName>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+<profiles>
+<profile>
+<!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
+<!-- Use this profile for any OpenShift specific customization your app will need. -->
+<!-- By default that is to put the resulting archive into the 'deployments' folder. -->
+<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+<id>openshift</id>
+<build>
+<finalName>sfsbTest</finalName>
+<plugins>
+<plugin>
+<artifactId>maven-war-plugin</artifactId>
+<version>2.1.1</version>
+<configuration>
+<outputDirectory>deployments</outputDirectory>
+<warName>ROOT</warName>
+</configuration>
+</plugin>
+</plugins>
+</build>
+</profile>
+</profiles>
 
 </project>
+
